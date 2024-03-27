@@ -4,8 +4,13 @@ using UnityEngine;
 
 public class MainCharacter : MonoBehaviour
 {
-    public float horizontalSpeed = 0.1f;
-    public float jumpForce = 0.1f;
+    public Vector2 moveDirection;
+    public float moveSpeed = 2f;
+    public float jumpForce = 7f;
+    public bool onGround;
+    public Transform GroundCheck;
+    public float checkRadius = 0.2f;
+    public LayerMask Ground;
     
     private Rigidbody2D rb;
 
@@ -15,11 +20,27 @@ public class MainCharacter : MonoBehaviour
     }
     public void Update()
     {
-        var horizontal = Input.GetAxis("Horizontal");
-        transform.position += new Vector3(horizontal, 0, 0) * horizontalSpeed * Time.deltaTime;
-        if (Input.GetAxis("Jump") != 0f)
+        Move();
+        Jump();
+        CheckingGround();
+    }
+
+    private void Move()
+    {
+        moveDirection.x = Input.GetAxis("Horizontal");
+        rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);    
+    }
+
+    private void Jump()
+    {
+        if (Input.GetAxis("Jump") != 0f && onGround)
         {
-            rb.AddForce(new Vector3(0, jumpForce, 0), ForceMode2D.Impulse);   
+            rb.AddForce(Vector2.up * jumpForce);
         }
+    }
+    
+    void CheckingGround()
+    {
+        onGround = Physics2D.OverlapCircle(GroundCheck.position, checkRadius, Ground);
     }
 }
