@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class MainCharacter : MonoBehaviour
 {
+    public bool isFacedRight = true;
     public Vector2 moveDirection;
     public float moveSpeed = 2f;
     public float jumpForce = 30f;
@@ -33,6 +34,7 @@ public class MainCharacter : MonoBehaviour
         Jump();
         CheckingGround();
         Fight();
+        Flip();
     }
 
     private void Move()
@@ -66,6 +68,17 @@ public class MainCharacter : MonoBehaviour
         {
             punch2LastUsed = DateTime.Now;
             FightHandler.Action(Punch2.position, Punch2Radius, 7, 20, false);
+        }
+    }
+
+    private void Flip()
+    {
+        if (moveDirection.x > 0 && !isFacedRight || moveDirection.x < 0 && isFacedRight)
+        {
+            var newDirection = transform.localScale;
+            newDirection.x *= -1;
+            transform.localScale = newDirection;
+            isFacedRight = !isFacedRight;
         }
     }
 }
