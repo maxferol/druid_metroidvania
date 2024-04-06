@@ -4,28 +4,28 @@ using UnityEngine;
 
 public class FightHandler : MonoBehaviour
 {
-    static GameObject GetNearestTarget(Vector3 position, Collider2D[] array) 
+    public static GameObject GetNearestTarget(Vector3 position, Collider2D[] colliders) 
     {
-        Collider2D current = null;
-        float dist = Mathf.Infinity;
+        Collider2D result = null;
+        var distance = Mathf.Infinity;
 
-        foreach(Collider2D coll in array)
+        foreach(Collider2D collider in colliders)
         {
-            float curDist = Vector3.Distance(position, coll.transform.position);
+            var currentDistance = Vector3.Distance(position, collider.transform.position);
 
-            if(curDist < dist)
+            if(currentDistance < distance)
             {
-                current = coll;
-                dist = curDist;
+                result = collider;
+                distance = currentDistance;
             }
         }
 
-        return (current != null) ? current.gameObject : null;
+        return (result != null) ? result.gameObject : null;
     }
     
-    public static void Action(Vector2 point, float radius, int layerMask, float damage, bool allTargets)
+    public static void Fight(Vector2 point, float radius, int layerMask, float damage, bool allTargets = false)
     {
-        Collider2D[] colliders = Physics2D.OverlapCircleAll(point, radius, 1 << layerMask);
+        var colliders = Physics2D.OverlapCircleAll(point, radius, 1 << layerMask);
 
         if(!allTargets)
         {

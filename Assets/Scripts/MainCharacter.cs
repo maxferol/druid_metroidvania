@@ -5,20 +5,27 @@ using UnityEngine;
 
 public class MainCharacter : MonoBehaviour
 {
-    public bool isFacedRight = true;
+    // Настройки горизонтального движения
     public Vector2 moveDirection;
+    public bool isFacedRight = true;
     public float moveSpeed = 2f;
+    
+    // Настройки вертикального движения
     public float jumpForce = 30f;
     public bool onGround;
     public Transform GroundCheck;
-    public float checkRadius = 0.2f;
     public LayerMask Ground;
-    public Transform Punch1;
+    public float checkRadius = 0.2f;
+    
+    // Настройки атаки
+    public int Punch1Force = 10;
+    public int Punch2Force = 20;
     public TimeSpan Punch1Cooldown = TimeSpan.FromSeconds(1);
+    public TimeSpan Punch2Cooldown = TimeSpan.FromSeconds(2);
+    public Transform Punch1;
     public float Punch1Radius;
     public Transform Punch2;
     public float Punch2Radius;
-    public TimeSpan Punch2Cooldown = TimeSpan.FromSeconds(2);
     
     private Rigidbody2D rb;
     private DateTime punch1LastUsed = DateTime.Now;
@@ -61,13 +68,13 @@ public class MainCharacter : MonoBehaviour
         if(Input.GetAxis("Fire1") != 0f && punch1LastUsed + Punch1Cooldown <= DateTime.Now)
         {
             punch1LastUsed = DateTime.Now;
-            FightHandler.Action(Punch1.position, Punch1Radius, 7, 10, false);
+            FightHandler.Fight(Punch1.position, Punch1Radius, (int)LayersNumbers.Enemy, Punch1Force, false);
         }
         
         if(Input.GetAxis("Fire2") != 0f && punch2LastUsed + Punch2Cooldown <= DateTime.Now)
         {
             punch2LastUsed = DateTime.Now;
-            FightHandler.Action(Punch2.position, Punch2Radius, 7, 20, false);
+            FightHandler.Fight(Punch2.position, Punch2Radius, (int)LayersNumbers.Enemy, Punch2Force, false);
         }
     }
 
