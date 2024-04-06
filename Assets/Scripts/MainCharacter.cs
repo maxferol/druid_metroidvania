@@ -11,6 +11,8 @@ public class MainCharacter : MonoBehaviour
     public Transform GroundCheck;
     public float checkRadius = 0.2f;
     public LayerMask Ground;
+    public Transform Punch1;
+    public float Punch1Radius;
     
     private Rigidbody2D rb;
 
@@ -23,6 +25,7 @@ public class MainCharacter : MonoBehaviour
         Move();
         Jump();
         CheckingGround();
+        Fight();
     }
 
     private void Move()
@@ -39,8 +42,16 @@ public class MainCharacter : MonoBehaviour
         }
     }
     
-    void CheckingGround()
+    private void CheckingGround()
     {
         onGround = Physics2D.OverlapCircle(GroundCheck.position, checkRadius, Ground);
+    }
+
+    private void Fight()
+    {
+        if(Input.GetKeyDown(KeyCode.F))
+        {
+            FightHandler.Action(Punch1.position, Punch1Radius, 7, 10, false);
+        }
     }
 }
