@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class FightHandler : MonoBehaviour
 {
-    // Start is called before the first frame update
     static GameObject GetNearestTarget(Vector3 position, Collider2D[] array) 
     {
         Collider2D current = null;
@@ -23,12 +22,7 @@ public class FightHandler : MonoBehaviour
 
         return (current != null) ? current.gameObject : null;
     }
-
-    // point - точка контакта
-    // radius - радиус поражения
-    // layerMask - номер слоя, с которым будет взаимодействие
-    // damage - наносимый урон
-    // allTargets - должны-ли получить урон все цели, попавшие в зону поражения
+    
     public static void Action(Vector2 point, float radius, int layerMask, float damage, bool allTargets)
     {
         Collider2D[] colliders = Physics2D.OverlapCircleAll(point, radius, 1 << layerMask);
@@ -38,7 +32,7 @@ public class FightHandler : MonoBehaviour
             GameObject obj = GetNearestTarget(point, colliders);
             if(obj != null && obj.GetComponent<Enemy>())
             {
-                obj.GetComponent<Enemy>().HP -= damage;
+                obj.GetComponent<Enemy>().AddDamage(-damage);
             }
             return;
         }
@@ -47,7 +41,7 @@ public class FightHandler : MonoBehaviour
         {
             if(hit.GetComponent<Enemy>())
             {
-                hit.GetComponent<Enemy>().HP -= damage;
+                hit.GetComponent<Enemy>().AddDamage(-damage);
             }
         }
     }

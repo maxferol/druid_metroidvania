@@ -17,4 +17,16 @@ public class Enemy : MonoBehaviour
     {
         
     }
+    
+    public void AddDamage(float damage)
+    {
+        HP += damage;
+
+        if(HP <= 0)
+        {
+            HP = 0;
+
+            Destroy(gameObject);
+        }
+    }
 }
