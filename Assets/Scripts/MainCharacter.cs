@@ -11,9 +11,13 @@ public class MainCharacter : MonoBehaviour
     // Настройки вертикального движения
     public float jumpForce = 10f;
     public bool onGround;
-    public Transform GroundCheck;
-    public LayerMask Ground;
+    public Transform groundCheck;
+    public LayerMask ground;
     public float checkRadius = 0.2f;
+    public int currentJumps = 0;
+    public int maximumJumps = 2;
+    public DateTime lastJumped = DateTime.Now;
+    public TimeSpan jumpCooldown = TimeSpan.FromSeconds(1);
     
     // Настройки атаки
     public int Punch1Force = 10;
@@ -54,15 +58,23 @@ public class MainCharacter : MonoBehaviour
 
     private void Jump()
     {
-        if (Input.GetButton("Jump") && onGround)
+        if (onGround)
+        {
+            currentJumps = 0;    
+        }
+        
+        if (Input.GetButton("Jump") && (onGround || (currentJumps < maximumJumps && lastJumped + jumpCooldown <= DateTime.Now)))
         {
             rb.velocity = Vector2.up * jumpForce;
+            lastJumped = DateTime.Now;
+            currentJumps++;
         }
+        
     }
     
     private void CheckingGround()
     {
-        onGround = Physics2D.OverlapCircle(GroundCheck.position, checkRadius, Ground);
+        onGround = Physics2D.OverlapCircle(groundCheck.position, checkRadius, ground);
     }
 
     private void Fight()
