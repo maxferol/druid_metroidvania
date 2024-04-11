@@ -1,6 +1,4 @@
 using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class MainCharacter : MonoBehaviour
@@ -11,7 +9,7 @@ public class MainCharacter : MonoBehaviour
     public float moveSpeed = 2f;
     
     // Настройки вертикального движения
-    public float jumpForce = 30f;
+    public float jumpForce = 10f;
     public bool onGround;
     public Transform GroundCheck;
     public LayerMask Ground;
@@ -37,6 +35,10 @@ public class MainCharacter : MonoBehaviour
     }
     public void Update()
     {
+    }
+
+    public void FixedUpdate()
+    {
         Move();
         Jump();
         CheckingGround();
@@ -46,15 +48,15 @@ public class MainCharacter : MonoBehaviour
 
     private void Move()
     {
-        moveDirection.x = Input.GetAxis("Horizontal");
+        moveDirection.x = Input.GetAxisRaw("Horizontal");
         rb.velocity = new Vector2(moveDirection.x * moveSpeed, rb.velocity.y);    
     }
 
     private void Jump()
     {
-        if (Input.GetAxis("Jump") != 0f && onGround)
+        if (Input.GetButton("Jump") && onGround)
         {
-            rb.AddForce(Vector2.up * jumpForce);
+            rb.velocity = Vector2.up * jumpForce;
         }
     }
     
@@ -65,16 +67,16 @@ public class MainCharacter : MonoBehaviour
 
     private void Fight()
     {
-        if(Input.GetAxis("Fire1") != 0f && punch1LastUsed + Punch1Cooldown <= DateTime.Now)
+        if(Input.GetButton("Fire1") && punch1LastUsed + Punch1Cooldown <= DateTime.Now)
         {
             punch1LastUsed = DateTime.Now;
-            FightHandler.Fight(Punch1.position, Punch1Radius, (int)LayersNumbers.Enemy, Punch1Force, false);
+            FightHandler.Fight(Punch1.position, Punch1Radius, (int)LayersNumbers.Enemy, Punch1Force);
         }
         
-        if(Input.GetAxis("Fire2") != 0f && punch2LastUsed + Punch2Cooldown <= DateTime.Now)
+        if(Input.GetButton("Fire2") && punch2LastUsed + Punch2Cooldown <= DateTime.Now)
         {
             punch2LastUsed = DateTime.Now;
-            FightHandler.Fight(Punch2.position, Punch2Radius, (int)LayersNumbers.Enemy, Punch2Force, false);
+            FightHandler.Fight(Punch2.position, Punch2Radius, (int)LayersNumbers.Enemy, Punch2Force);
         }
     }
 
