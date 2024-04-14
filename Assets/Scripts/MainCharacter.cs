@@ -19,7 +19,12 @@ public class MainCharacter : MonoBehaviour
     [SerializeField] private int currentJumps = 0;
     [SerializeField] private int maximumJumps = 2;
     [SerializeField] private TimeSpan jumpCooldown = TimeSpan.FromSeconds(1);
-    [SerializeField] private DateTime LastJumped = DateTime.Now;
+    [SerializeField] private DateTime lastJumped = DateTime.Now;
+    [SerializeField] private float wallCheckRadius = 0.2f;
+    [SerializeField] private bool isWallSliding = false;
+    [SerializeField] private float wallSlideSpeed = 2f;
+    [SerializeField] private Transform wallCheck;
+    [SerializeField] private LayerMask wallLayer;
     
     // Настройки атаки
     [SerializeField] private int punch1Force = 10;
@@ -65,9 +70,10 @@ public class MainCharacter : MonoBehaviour
         Jump();
         CheckingGround();
         Fight();
+        WallSlide();
         Flip();
         
-        if (Input.GetKeyDown(KeyCode.F) && canLunge)
+        if (Input.GetKeyDown(KeyCode.LeftShift) && canLunge)
         {
             StartCoroutine(Lunge());
         }
@@ -86,10 +92,10 @@ public class MainCharacter : MonoBehaviour
             currentJumps = 0;    
         }
         
-        if (Input.GetButton("Jump") && (onGround || (currentJumps < maximumJumps && LastJumped + jumpCooldown <= DateTime.Now)))
+        if (Input.GetButton("Jump") && (onGround || (currentJumps < maximumJumps && lastJumped + jumpCooldown <= DateTime.Now)))
         {
             _rb.velocity = Vector2.up * jumpForce;
-            LastJumped = DateTime.Now;
+            lastJumped = DateTime.Now;
             currentJumps++;
         }
         
@@ -138,5 +144,24 @@ public class MainCharacter : MonoBehaviour
         isLunging = false;
         yield return new WaitForSeconds(lungeCooldownInSeconds);
         canLunge = true;
+    }
+
+    private bool IsOnWall()
+    {
+        return Physics2D.OverlapCircle(wallCheck.position, wallCheckRadius, wallLayer);
+    }
+
+    private void WallSlide()
+    {
+        if (IsOnWall() && !onGround)
+        {
+            currentJumps = 0; 
+            isWallSliding = true;
+            _rb.velocity = new Vector2(_rb.velocity.x, Mathf.Clamp(_rb.velocity.y, -wallSlideSpeed, float.MaxValue));
+        }
+        else
+        {
+            isWallSliding = false;
+        }
     }
 }
