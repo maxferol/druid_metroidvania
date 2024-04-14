@@ -25,6 +25,9 @@ public class MainCharacter : MonoBehaviour
     [SerializeField] private float wallSlideSpeed = 2f;
     [SerializeField] private Transform wallCheck;
     [SerializeField] private LayerMask wallLayer;
+    [SerializeField] private float fallForce = 5f;
+    [SerializeField] private DateTime lastFalled = DateTime.Now;
+    [SerializeField] private TimeSpan fallCooldown = TimeSpan.FromSeconds(2);
     
     // Настройки атаки
     [SerializeField] private int punch1Force = 10;
@@ -72,6 +75,7 @@ public class MainCharacter : MonoBehaviour
         Fight();
         WallSlide();
         Flip();
+        Fall();
         
         if (Input.GetKeyDown(KeyCode.LeftShift) && canLunge)
         {
@@ -162,6 +166,15 @@ public class MainCharacter : MonoBehaviour
         else
         {
             isWallSliding = false;
+        }
+    }
+
+    private void Fall()
+    {
+        if (Input.GetKeyDown(KeyCode.S) && lastFalled + fallCooldown <= DateTime.Now)
+        {
+            lastFalled = DateTime.Now;
+            _rb.velocity += Vector2.down * fallForce;
         }
     }
 }
