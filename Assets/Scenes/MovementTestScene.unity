@@ -802,7 +802,7 @@ MonoBehaviour:
   moveSpeed: 0.05
   jumpForce: 10
   onGround: 0
-  groundCheck: {fileID: 0}
+  groundCheck: {fileID: 1338668404}
   ground:
     serializedVersion: 2
     m_Bits: 0
@@ -819,10 +819,10 @@ MonoBehaviour:
   fallForce: 5
   punch1Force: 10
   punch2Force: 20
-  punch1: {fileID: 0}
-  punch1Radius: 0
-  punch2: {fileID: 0}
-  punch2Radius: 0
+  punch1: {fileID: 1376586}
+  punch1Radius: 1
+  punch2: {fileID: 1066659631}
+  punch2Radius: 2
   lungeForce: 5
   lungeTimeInSeconds: 0.5
   canLunge: 1
