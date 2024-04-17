@@ -799,14 +799,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0}
   isFacedRight: 1
-  moveSpeed: 2
-  jumpForce: 30
+  moveSpeed: 5
+  jumpForce: 10
   onGround: 0
-  GroundCheck: {fileID: 1338668404}
-  Ground:
+  groundCheck: {fileID: 0}
+  ground:
     serializedVersion: 2
-    m_Bits: 64
+    m_Bits: 0
   checkRadius: 0.2
+  currentJumps: 0
+  maximumJumps: 2
   Punch1Force: 10
   Punch2Force: 20
   Punch1: {fileID: 1376586}
