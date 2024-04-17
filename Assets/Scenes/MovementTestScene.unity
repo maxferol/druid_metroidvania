@@ -799,7 +799,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   moveDirection: {x: 0, y: 0}
   isFacedRight: 1
-  moveSpeed: 5
+  moveSpeed: 0.05
   jumpForce: 10
   onGround: 0
   groundCheck: {fileID: 0}
@@ -809,12 +809,25 @@ MonoBehaviour:
   checkRadius: 0.2
   currentJumps: 0
   maximumJumps: 2
-  Punch1Force: 10
-  Punch2Force: 20
-  Punch1: {fileID: 1376586}
-  Punch1Radius: 1
-  Punch2: {fileID: 1066659631}
-  Punch2Radius: 2
+  wallCheckRadius: 0.2
+  isWallSliding: 0
+  wallSlideSpeed: 2
+  wallCheck: {fileID: 0}
+  wallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  fallForce: 5
+  punch1Force: 10
+  punch2Force: 20
+  punch1: {fileID: 0}
+  punch1Radius: 0
+  punch2: {fileID: 0}
+  punch2Radius: 0
+  lungeForce: 5
+  lungeTimeInSeconds: 0.5
+  canLunge: 1
+  isLunging: 0
+  lungeCooldownInSeconds: 2
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
