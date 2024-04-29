@@ -228,7 +228,6 @@ GameObject:
   - component: {fileID: 600570271}
   - component: {fileID: 600570272}
   - component: {fileID: 600570270}
-  - component: {fileID: 600570275}
   m_Layer: 7
   m_Name: Enemy
   m_TagString: Untagged
@@ -302,7 +301,7 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 600570269}
-  m_BodyType: 0
+  m_BodyType: 1
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
@@ -388,18 +387,6 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &600570275
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 600570269}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b3fcfa344950a6440a5051d0e1d2bda9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1324510825
 GameObject:
   m_ObjectHideFlags: 0
@@ -581,6 +568,50 @@ PrefabInstance:
     - target: {fileID: 1615169661978878103, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 2289191664735652254, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: m_BodyType
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: maxJumps
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: runSpeed
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: fallSpeed
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: isJumping
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: jumpSpeed
+      value: 0.02
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: ground.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 3017976561517001961, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: jumpsAvailable
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: ground.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
