@@ -39,7 +39,7 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
         {
             if (nextStateKey.Equals(CurrentState.StateKey))
             {
-                CurrentState.UpdateState();
+                CurrentState.FixedUpdateState();
             }
 
             else
