@@ -2,8 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum LayersNumbers
+public class FlyingEnemy : PatrollingEnemy
 {
-    Ground = 6,
-    Enemy = 7
+   
 }

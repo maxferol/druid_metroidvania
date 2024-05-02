@@ -45,7 +45,9 @@ public class MainCharacter : MonoBehaviour
     [SerializeField] private bool canLunge = true;
     [SerializeField] private bool isLunging = false;
     [SerializeField] private float lungeCooldownInSeconds = 2;
-    
+
+    [SerializeField] private LayerMask enemyLayer;
+
     private Rigidbody2D _rb;
     private DateTime _punch1LastUsed = DateTime.Now;
     private DateTime _punch2LastUsed = DateTime.Now;
@@ -115,13 +117,13 @@ public class MainCharacter : MonoBehaviour
         if(Input.GetButton("Fire1") && _punch1LastUsed + punch1Cooldown <= DateTime.Now)
         {
             _punch1LastUsed = DateTime.Now;
-            FightHandler.Fight(punch1.position, punch1Radius, (int)LayersNumbers.Enemy, punch1Force);
+            FightHandler.Fight(punch1.position, punch1Radius, enemyLayer, punch1Force);
         }
         
         if(Input.GetButton("Fire2") && _punch2LastUsed + punch2Cooldown <= DateTime.Now)
         {
             _punch2LastUsed = DateTime.Now;
-            FightHandler.Fight(punch2.position, punch2Radius, (int)LayersNumbers.Enemy, punch2Force);
+            FightHandler.Fight(punch2.position, punch2Radius, enemyLayer, punch2Force);
         }
     }
 

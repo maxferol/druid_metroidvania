@@ -530,6 +530,11 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!4 &1668464345 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 2379776772288851188, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+  m_PrefabInstance: {fileID: 7399250498202490618}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7399250498202490618
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -581,6 +586,30 @@ PrefabInstance:
     - target: {fileID: 1615169661978878103, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
       propertyPath: m_Name
       value: Player
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: wallCheck
+      value: 
+      objectReference: {fileID: 1668464345}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: lungeForce
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: punch1Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: punch2Radius
+      value: 0.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: ground.m_Bits
+      value: 64
+      objectReference: {fileID: 0}
+    - target: {fileID: 8530393404218952977, guid: ba2d6ce0d03c6d34f92f6ada44c5f6a4, type: 3}
+      propertyPath: wallLayer.m_Bits
+      value: 64
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
