@@ -66,7 +66,7 @@ public class PlayerContext
 
     public void UpdateInputContext()
     {
-        dashPressed = dashPressed || Input.GetButtonDown("Dash");
+        dashPressed = Input.GetButton("Dash");
         jumpPressed = jumpPressed || Input.GetButtonDown("Jump");
         jumpIsHeld = Input.GetButton("Jump");
         runDirection = Input.GetAxisRaw("Horizontal");
