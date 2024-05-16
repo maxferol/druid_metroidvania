@@ -8,6 +8,7 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
     protected Dictionary<EState, BaseState<EState>> States = new Dictionary<EState, BaseState<EState>>();
     protected BaseState<EState> CurrentState;
 
+    protected bool IsTransitioningState = false;
     protected EState nextStateKey; 
 
     void Start()
@@ -18,28 +19,41 @@ public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
 
     void Update()
     {
-        SelfUpdate();
-    }
+        nextStateKey = CurrentState.GetNextState();
 
-    public abstract void SelfUpdate();
-    public abstract void SelfFixedUpdate();
+        if (!IsTransitioningState)
+        {
+            if (nextStateKey.Equals(CurrentState.StateKey))
+            {
+                CurrentState.UpdateState();
+            }
+
+            else
+                TransitionToState(nextStateKey);
+        }
+    }
 
     private void FixedUpdate()
     {
-        SelfFixedUpdate();
-        nextStateKey = CurrentState.GetNextState();
-        if (!nextStateKey.Equals(CurrentState.StateKey))
+        if (!IsTransitioningState)
         {
-            TransitionToState(nextStateKey);
+            if (nextStateKey.Equals(CurrentState.StateKey))
+            {
+                CurrentState.FixedUpdateState();
+            }
+
+            else
+                TransitionToState(nextStateKey);
         }
-        CurrentState.FixedUpdateState();
     }
 
     public void TransitionToState(EState stateKey)
     {
+        IsTransitioningState = true;
         CurrentState.ExitState();
         CurrentState = States[stateKey];
         CurrentState.EnterState();
+        IsTransitioningState = false;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
