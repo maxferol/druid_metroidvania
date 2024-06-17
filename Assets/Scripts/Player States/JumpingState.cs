@@ -19,13 +19,13 @@ public class JumpingState : PlayerState
         jumpingFromWallTime = 0;
         jumpTimeLeft = Context._jumpMaxDuration;
         Context.jumpPressed = false;
-        Debug.Log("Entered Jumping State");
+        //Debug.Log("Entered Jumping State");
     }
 
     public override void ExitState()
     {
         Context.jumpingFromWall = false;
-        Debug.Log("Left Jumping State");
+        //Debug.Log("Left Jumping State");
     }
 
     public override void UpdateState()

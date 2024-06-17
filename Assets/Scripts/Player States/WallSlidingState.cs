@@ -20,12 +20,12 @@ public class WallSlidingState : PlayerState
         {
             Context._plRB.transform.localScale = new Vector3(1, Context._plRB.transform.localScale.y, Context._plRB.transform.localScale.z);
         }
-        Debug.Log("Entered WallSliding State");
+        //Debug.Log("Entered WallSliding State");
     }
 
     public override void ExitState()
     {
-        Debug.Log("Left WallSliding State");
+        //Debug.Log("Left WallSliding State");
     }
 
     public override void UpdateState()

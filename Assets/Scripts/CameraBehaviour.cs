@@ -4,16 +4,24 @@ using UnityEngine;
 
 public class CameraBehaviour : MonoBehaviour
 {
-    public Transform plTransform;
-    // Start is called before the first frame update
-    void Start()
+    [SerializeField] private Vector3 offset;
+    [SerializeField] private Transform target;
+    [SerializeField] private float xLerpPower;
+    [SerializeField] private float yLerpPower;
+
+    private Vector3 newPos;
+
+    private void Start()
     {
-        transform.position = new Vector3(plTransform.position.x, plTransform.position.y, -10);
+        transform.position = target.position + offset;
+        newPos = transform.position;
     }
 
-    // Update is called once per frame
     void LateUpdate()
     {
-        transform.position = new Vector3(plTransform.position.x, plTransform.position.y + 4, -10);
+        //newPos.x = Mathf.Lerp(transform.position.x, target.position.x + offset.x, xLerpPower);
+        //newPos.y = Mathf.Lerp(transform.position.y, target.position.y + offset.y, yLerpPower);
+        newPos = target.position + offset;
+        transform.position = newPos;
     }
 }

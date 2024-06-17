@@ -24,6 +24,9 @@ public class PlayerContext
     public bool jumpIsHeld;
     public float runDirection;
 
+    public bool lightAttackPressed;
+    public bool heavyAttackPressed;
+
     public bool isOnGround;
     public float groundLevel;
     public float _heightAboveGround;
@@ -70,6 +73,8 @@ public class PlayerContext
         jumpPressed = jumpPressed || Input.GetButtonDown("Jump");
         jumpIsHeld = Input.GetButton("Jump");
         runDirection = Input.GetAxisRaw("Horizontal");
+        lightAttackPressed = Input.GetMouseButton(0);
+        heavyAttackPressed = Input.GetMouseButton(1);
     }
 
     public void UpdatePhysicsContext()
