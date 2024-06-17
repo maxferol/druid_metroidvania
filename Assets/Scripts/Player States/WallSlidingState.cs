@@ -20,6 +20,7 @@ public class WallSlidingState : PlayerState
         {
             Context._plRB.transform.localScale = new Vector3(1, Context._plRB.transform.localScale.y, Context._plRB.transform.localScale.z);
         }
+        Context._jumpsLeft = Context._jumpsMaxNumber;
         //Debug.Log("Entered WallSliding State");
     }
 

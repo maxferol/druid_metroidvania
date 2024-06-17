@@ -6,7 +6,7 @@ using UnityEngine;
 public abstract class StateMachine<EState> : MonoBehaviour where EState : Enum
 {
     protected Dictionary<EState, BaseState<EState>> States = new Dictionary<EState, BaseState<EState>>();
-    protected BaseState<EState> CurrentState;
+    public BaseState<EState> CurrentState;
 
     protected EState nextStateKey; 
 

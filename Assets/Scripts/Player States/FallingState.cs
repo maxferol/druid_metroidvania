@@ -38,6 +38,10 @@ public class FallingState : PlayerState
 
     public override PlayerStateMachine.EPlayerState GetNextState()
     {
+        if (Context._fightSystem.isAttacking)
+            return PlayerStateMachine.EPlayerState.Attacking;
+        if (Context.jumpPressed && (Context._jumpsLeft > 0))
+            return PlayerStateMachine.EPlayerState.Jumping;
         if (Context.dashPressed && Context._dashCooldownLeft <= 0)
             return PlayerStateMachine.EPlayerState.Dashing;
         if (Context.isOnGround)

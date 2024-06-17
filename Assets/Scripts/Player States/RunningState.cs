@@ -14,6 +14,7 @@ public class RunningState : PlayerState
     public override void EnterState()
     {
         //Debug.Log("Entered Running State");
+        Context._jumpsLeft = Context._jumpsMaxNumber;
     }
 
     public override void ExitState()
@@ -37,6 +38,8 @@ public class RunningState : PlayerState
 
     public override PlayerStateMachine.EPlayerState GetNextState()
     {
+        if (Context._fightSystem.isAttacking)
+            return PlayerStateMachine.EPlayerState.Attacking;
         if (Context.dashPressed && Context._dashCooldownLeft <= 0)
             return PlayerStateMachine.EPlayerState.Dashing;
         if (Context.isOnGround && Context.jumpPressed)

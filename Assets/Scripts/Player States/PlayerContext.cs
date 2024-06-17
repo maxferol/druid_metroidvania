@@ -39,15 +39,22 @@ public class PlayerContext
     public bool jumpingFromWall;
     public float _jumpingFromWallMinTime;
 
+    private float _allowedAttackLag;
+    private float lightAttackTimer;
+    private float rightAttackTimer;
+
     public LayerMask _ground;
 
     public Transform _plTransform;
     public Rigidbody2D _plRB;
+    public GameObject _player;
+    public FightSystem _fightSystem;
 
     public PlayerContext(float runSpeed, float dashDuration, float dashSpeed, float dashCooldown,
         float jumpSpeed, float jumpMaxDuration, int jumpsMaxNumber, int jumpsLeft, 
         float fallingSpeed, float wallSlidingSpeed, float jumpingFromWallSpeed, float jumpingFromWallMinTime,
-        LayerMask ground, float heightAboveGround, Transform plTransform, Rigidbody2D plRB)
+        LayerMask ground, float heightAboveGround, Transform plTransform, Rigidbody2D plRB, GameObject player, FightSystem fightSystem,
+        float allowedAttackLag)
     {
         _runSpeed = runSpeed;
         _dashDuration = dashDuration;
@@ -65,6 +72,9 @@ public class PlayerContext
         _heightAboveGround = heightAboveGround;
         _plTransform = plTransform;
         _plRB = plRB;
+        _player = player;
+        _fightSystem = fightSystem;
+        _allowedAttackLag = allowedAttackLag;
     }
 
     public void UpdateInputContext()

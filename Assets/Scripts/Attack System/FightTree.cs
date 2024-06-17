@@ -7,7 +7,7 @@ public class FightTree
 {
     public PlayerContext playerContext;
 
-    public Attack currentAttack;
+    //public Attack currentAttack;
 
     public FightTree Left;
     public FightTree Right;
