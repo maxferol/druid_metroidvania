@@ -43,9 +43,9 @@ public class FightSystem : MonoBehaviour
     private void Initialize()
     {
         var basicLightAttackOffset = new Vector3(1.25f, 0.75f, 0);
-        var basicLightAttack = new BasicLightAttack(0.1f, 0.3f, 5f, attackAreas[0].GetComponent<Collider2D>(), 20, basicLightAttackOffset);
+        var basicLightAttack = new BasicLightAttack(0.1f, 0.3f, 0.3f, attackAreas[0].GetComponent<Collider2D>(), 20, basicLightAttackOffset);
         var basicHeavyAttackOffset = new Vector3(1.75f, 0.75f, 0);
-        var basicHeavyAttack = new BasicHeavyAttack(0.15f, 0.45f, 5f, attackAreas[1].GetComponent<Collider2D>(), 40, basicHeavyAttackOffset);
+        var basicHeavyAttack = new BasicHeavyAttack(0.15f, 0.45f, 0.45f, attackAreas[1].GetComponent<Collider2D>(), 40, basicHeavyAttackOffset);
         var airTossAttackOffset = new Vector3(1.25f, 0.75f, 0);
         attackList = new List<FightTreeNode>() {
             null, //start
