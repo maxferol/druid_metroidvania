@@ -17,30 +17,40 @@ public class FightSystem : MonoBehaviour
 
     private PlayerContext context;
     private BoxCollider2D playerCollider;
+    private PlayerStateMachine playerStateMachine;
 
     public Dictionary<string, Attack> triggerNameToAttack;
 
     [SerializeField]
-    private float attackTimer;
+    private float prepTimer;
+    [SerializeField]
+    public float attackTimer;
     [SerializeField]
     private float betweenAttacksTimer;
+
+    [SerializeField]
+    public bool isAttacking;
+    [SerializeField]
+    private bool canAttack;
+
+    [SerializeField]
+    private bool isOnCd;
+
+    public float tossPower;
 
     private string currentCombo;
 
     private void Initialize()
     {
         var basicLightAttackOffset = new Vector3(1.25f, 0.75f, 0);
-        var basicLightAttack = new BasicLightAttack(0.5f, attackAreas[0].GetComponent<Collider2D>(), 20, basicLightAttackOffset);
+        var basicLightAttack = new BasicLightAttack(0.1f, 0.3f, 0.3f, attackAreas[0].GetComponent<Collider2D>(), 20, basicLightAttackOffset);
         var basicHeavyAttackOffset = new Vector3(1.75f, 0.75f, 0);
-        var basicHeavyAttack = new BasicHeavyAttack(0.8f, attackAreas[1].GetComponent<Collider2D>(), 40, basicHeavyAttackOffset);
+        var basicHeavyAttack = new BasicHeavyAttack(0.15f, 0.45f, 0.45f, attackAreas[1].GetComponent<Collider2D>(), 40, basicHeavyAttackOffset);
+        var airTossAttackOffset = new Vector3(1.25f, 0.75f, 0);
         attackList = new List<FightTreeNode>() {
-            null,
-            new FightTreeNode(basicLightAttack, float.MinValue, float.MaxValue),
-            new FightTreeNode(basicHeavyAttack, float.MinValue, float.MaxValue),
-            new FightTreeNode(basicLightAttack, float.MinValue, float.MaxValue),
-            null,
-            null,
-            new FightTreeNode(basicHeavyAttack, float.MinValue, float.MaxValue),
+            null, //start
+            new FightTreeNode(basicLightAttack, float.MinValue, float.MaxValue), //L
+            new FightTreeNode(basicHeavyAttack, float.MinValue, float.MaxValue), //R
             };
         triggerNameToAttack = new Dictionary<string, Attack>();
         fightTree = new FightTree(attackList);
@@ -52,7 +62,9 @@ public class FightSystem : MonoBehaviour
                 triggerNameToAttack.Add(fightTreeNode._attack._attackArea.name, fightTreeNode._attack);
         }
         playerCollider = gameObject.GetComponent<BoxCollider2D>();
+        playerStateMachine = gameObject.GetComponent<PlayerStateMachine>();
         currentCombo = "";
+        canAttack = true;
     }
 
     private void Awake()
@@ -64,11 +76,15 @@ public class FightSystem : MonoBehaviour
     {
         TickTheTimer(ref attackTimer);
         TickTheTimer(ref betweenAttacksTimer);
+        TickTheTimer(ref prepTimer);
     }
 
     private void FixedUpdate()
     {
-        ReactToMouseClick();
+        //ReactToMouseClick();
+        UpdateState();
+        ReactToMouseClickNew();
+
     }
 
     public void OnDrawGizmos()
@@ -78,58 +94,65 @@ public class FightSystem : MonoBehaviour
 
     private void ReactToMouseClick()
     {
-        if (attackTimer <= 0)
+        if ((attackTimer <= 0) && (playerStateMachine.CurrentState.StateKey != PlayerStateMachine.EPlayerState.Dashing) && (playerStateMachine.CurrentState.StateKey != PlayerStateMachine.EPlayerState.WallSliding))
         {
             if (context.lightAttackPressed)
             {
-                if (currentSubTree.Left == null)
-                {
-                    currentSubTree.Data._attack.FinishAttack();
-                    currentSubTree = fightTree.Left;
-                    Debug.Log("combo over");
-                    currentCombo = "";
-                }
-                else
-                {
-                    currentSubTree = currentSubTree.Left;
-                }
-                attackColliderHolder.transform.position = gameObject.transform.position;
-                    //+ new Vector3(gameObject.transform.localScale.x * (playerCollider.size.x / 2), playerCollider.size.y / 2, 0);
-                attackColliderHolder.transform.localScale = new Vector3(gameObject.transform.localScale.x, 1, 1);
-                currentSubTree.Data._attack.StartAttack();
-                attackTimer = currentSubTree.Data._attack._attackDuration;
-                currentCombo += "L";
-                Debug.Log(currentCombo);
+                ReactToLeftClick();
             }
 
             else if (context.heavyAttackPressed)
             {
-                if (currentSubTree.Right == null)
-                {
-                    currentSubTree.Data._attack.FinishAttack();
-                    currentSubTree = fightTree.Right;
-                    Debug.Log("combo over");
-                    currentCombo = "";
-                }
-                else
-                {
-                    currentSubTree = currentSubTree.Right;
-                }
-                attackColliderHolder.transform.position = gameObject.transform.position;
-                currentSubTree.Data._attack.StartAttack();
-                attackColliderHolder.transform.localScale = new Vector3(gameObject.transform.localScale.x, 1, 1);
-                attackTimer = currentSubTree.Data._attack._attackDuration;
-                currentCombo += "R";
-                Debug.Log(currentCombo);
+                ReactToRightClick();
             }
 
             else
             {
-                if (currentSubTree.Data != null)
-                    currentSubTree.Data._attack.FinishAttack();
-                currentSubTree = fightTree;
-                currentCombo = "";
-                //Debug.Log("held for too long, no attack");
+                ReactToNoClick();
+            }
+        }
+    }
+
+    private void ReactToMouseClickNew()
+    {
+        if ((canAttack) && (playerStateMachine.CurrentState.StateKey != PlayerStateMachine.EPlayerState.Dashing) && (playerStateMachine.CurrentState.StateKey != PlayerStateMachine.EPlayerState.WallSliding))
+        {
+            if (context.lightAttackPressed)
+            {
+                ReactToLeftClick();
+            }
+
+            else if (context.heavyAttackPressed)
+            {
+                ReactToRightClick();
+            }
+
+            else
+            {
+                //ReactToNoClick();
+            }
+        }
+    }
+
+    private void UpdateState()
+    {
+        if (isAttacking)
+        {
+            if (attackTimer <= 0)
+            {
+                isAttacking = false;
+                isOnCd = true;
+                betweenAttacksTimer = currentSubTree.Data._attack._cdTime;
+                currentSubTree.Data._attack.FinishAttack();
+            }
+        }
+
+        else if (isOnCd)
+        {
+            if (betweenAttacksTimer <= 0)
+            {
+                isOnCd = false;
+                canAttack = true;
             }
         }
     }
@@ -138,6 +161,11 @@ public class FightSystem : MonoBehaviour
     {
         if (timer > 0)
             timer -= Time.deltaTime;
+    }
+
+    private void TickTheStopwatch(ref float stopWatch)
+    {
+        stopWatch += Time.deltaTime;
     }
 
     private void DrawAttackZone()
@@ -152,5 +180,69 @@ public class FightSystem : MonoBehaviour
                     ((BoxCollider2D)currentSubTree.Data._attack._attackArea).size);
             }
         }
+    }
+
+    private void ReactToLeftClick()
+    {
+        if (currentSubTree.Left == null)
+        {
+            //currentSubTree.Data._attack.FinishAttack();
+            currentSubTree = fightTree.Left;
+            Debug.Log("combo over");
+            currentCombo = "";
+        }
+        else
+        {
+            currentSubTree = currentSubTree.Left;
+        }
+        attackColliderHolder.transform.position = gameObject.transform.position;
+        //+ new Vector3(gameObject.transform.localScale.x * (playerCollider.size.x / 2), playerCollider.size.y / 2, 0);
+        attackColliderHolder.transform.localScale = new Vector3(gameObject.transform.localScale.x, 1, 1);
+        currentSubTree.Data._attack.StartAttack();
+        isAttacking = true;
+        isOnCd = false;
+        canAttack = false;
+        //prepTimer = currentSubTree.Data._attack._prepTime;
+        attackTimer = currentSubTree.Data._attack._attackDuration;
+        Debug.Log(attackTimer);
+        currentCombo += "L";
+        Debug.Log(currentCombo);
+    }
+
+    private void ReactToRightClick()
+    {
+        if (currentSubTree.Right == null)
+        {
+            //currentSubTree.Data._attack.FinishAttack();
+            currentSubTree = fightTree.Right;
+            Debug.Log("combo over");
+            currentCombo = "";
+        }
+        else
+        {
+            currentSubTree = currentSubTree.Right;
+        }
+        attackColliderHolder.transform.position = gameObject.transform.position;
+        //+ new Vector3(gameObject.transform.localScale.x * (playerCollider.size.x / 2), playerCollider.size.y / 2, 0);
+        attackColliderHolder.transform.localScale = new Vector3(gameObject.transform.localScale.x, 1, 1);
+        currentSubTree.Data._attack.StartAttack();
+        isAttacking = true;
+        isOnCd = false;
+        canAttack = false;
+        //prepTimer = currentSubTree.Data._attack._prepTime;
+        attackTimer = currentSubTree.Data._attack._attackDuration;
+        Debug.Log(attackTimer);
+        currentCombo += "R";
+        Debug.Log(currentCombo);
+    }
+
+    private void ReactToNoClick()
+    {
+        if (currentSubTree.Data != null)
+        {
+            currentSubTree.Data._attack.FinishAttack();
+        }
+        currentSubTree = fightTree;
+        currentCombo = "";
     }
 }

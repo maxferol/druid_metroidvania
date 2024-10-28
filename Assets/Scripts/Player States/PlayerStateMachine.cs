@@ -12,12 +12,15 @@ public class PlayerStateMachine : StateMachine<PlayerStateMachine.EPlayerState>
         Jumping,
         Falling,
         WallSliding,
+        Attacking,
     }
 
     public PlayerContext context;
 
     private Transform plTransform;
     private Rigidbody2D plRB;
+    private GameObject player;
+    private FightSystem fightSystem;
 
     [SerializeField] private LayerMask ground;
     [SerializeField] private int wallsLayer;
@@ -41,15 +44,20 @@ public class PlayerStateMachine : StateMachine<PlayerStateMachine.EPlayerState>
     [SerializeField] private float jumpingFromWallSpeed;
     [SerializeField] private float jumpingFromWallMinTime;
 
+    [SerializeField] private float allowedAttackLag;
+
     private void Awake()
     {
         plTransform = GetComponent<Transform>();
         plRB = GetComponent<Rigidbody2D>();
+        player = gameObject;
         wallsLayer = LayerMask.NameToLayer("Walls");
+        fightSystem = GetComponent<FightSystem>();
         context = new PlayerContext(runSpeed, dashDuration, dashSpeed, dashCooldown,
             jumpSpeed, jumpMaxDuration, jumpsMaxNumber, jumpsLeft, 
             fallingSpeed, wallSlidingSpeed, jumpingFromWallSpeed, jumpingFromWallMinTime, 
-            ground, heightAboveGround, plTransform, plRB);
+            ground, heightAboveGround, plTransform, plRB, player, fightSystem,
+            allowedAttackLag);
         InitializeStates();
     }
 
@@ -61,6 +69,7 @@ public class PlayerStateMachine : StateMachine<PlayerStateMachine.EPlayerState>
         States.Add(EPlayerState.Jumping, new JumpingState(context, EPlayerState.Jumping));
         States.Add(EPlayerState.Falling, new FallingState(context, EPlayerState.Falling));
         States.Add(EPlayerState.WallSliding, new WallSlidingState(context, EPlayerState.WallSliding));
+        States.Add(EPlayerState.Attacking, new AttackingState(context, EPlayerState.Attacking));
         CurrentState = States[EPlayerState.Idle];
     }
 

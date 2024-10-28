@@ -19,6 +19,7 @@ public class JumpingState : PlayerState
         jumpingFromWallTime = 0;
         jumpTimeLeft = Context._jumpMaxDuration;
         Context.jumpPressed = false;
+        Context._jumpsLeft -= 1;
         //Debug.Log("Entered Jumping State");
     }
 
@@ -52,6 +53,8 @@ public class JumpingState : PlayerState
 
     public override PlayerStateMachine.EPlayerState GetNextState()
     {
+        if (Context._fightSystem.isAttacking)
+            return PlayerStateMachine.EPlayerState.Attacking;
         if (Context.dashPressed && Context._dashCooldownLeft <= 0)
             return PlayerStateMachine.EPlayerState.Dashing;
         if ((jumpTimeLeft > 0) && (Context.jumpIsHeld))

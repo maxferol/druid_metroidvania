@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class BasicLightAttack : Attack
 {
-    public BasicLightAttack(float attackDuration, Collider2D attackArea, int damage, Vector3 offset) : base(attackDuration, attackArea, damage, offset)
+    public BasicLightAttack(float prepTime, float attackDuration,  float cdTime, Collider2D attackArea, int damage, Vector3 offset) : base(prepTime, attackDuration, cdTime, attackArea, damage, offset)
     {
 
     }
@@ -14,9 +14,9 @@ public class BasicLightAttack : Attack
         _attackArea.enabled = true;
     }
 
-    public override void DoAttack(EnemyBehaviour enemy)
+    public override void DoAttack(ReactToAttack enemy)
     {
-        enemy.hp -= _damage;
+
     }
 
     public override void FinishAttack()
